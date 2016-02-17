@@ -1,0 +1,4 @@
+*.log
+*.tmp.php
+*.txt
+/include/config/config.php
