@@ -2,3 +2,5 @@
 *.tmp.php
 *.txt
 /include/config/config.php
+/include/swap/config/config.php
+/include/data/config/config.php
