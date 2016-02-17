@@ -1,4 +1,5 @@
 <?php
+include_once("include/config/config.php");
 
 echo "<html><body><pre>";
 $inbox = imap_open(IMAP_CON_PATH, IMAP_ACC_USR, IMAP_ACC_PWD) or die(print_r(imap_errors()));
@@ -22,7 +23,7 @@ foreach($emails as $mail) {
 	//fwrite($f, base64_decode(imap_fetchbody($inbox, $mail, '2', FT_PEEK)));
 	//fclose($f);
 
-	echo htmlentities(imap_fetchbody($inbox, $mail, '2', FT_PEEK));
+	echo htmlentities(imap_fetchbody($inbox, $mail, '', FT_PEEK));
 
 
 	//if(!isset($emailStructure->parts)) {
