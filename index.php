@@ -7,6 +7,19 @@ ini_set("ignore_repeated_errors", 0);
 ini_set("track_errors", 1);
 ini_set("html_errors", 1);
 
+include_once("include/swipe/core/eSwipeImapSearchBuilder.php");
+$c = array("ALL"=>null,"FROM"=>"asdfasdfasdf","UNSEEN"=>null,"TEXT"=>"FUCKER FUCK FACE FUCK THIS SHIT","BODY"=>"LIKE A GODDESS","ASS"=>"HOLE","FLAGGED"=>null);
+$o = new eSwipeImapSearchBuilder($c);
+echo "<html><body><pre>";
+
+var_dump($o);
+echo "<br /><br /><br /><br /><br />";
+$o->BuildCriteriaString();
+var_dump($o);
+echo "</pre></body></html>";
+exit;
+
+
 
 include_once("include/swipe/core/eSwipeImap.php");
 echo "<html><body><pre>";
