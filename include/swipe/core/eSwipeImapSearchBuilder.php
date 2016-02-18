@@ -60,7 +60,7 @@ class eSwipeImapSearchBuilder {
 		$this->_isBuilt = false;
 
 		$this->_criteriaMap = array(
-			"ALL"			=>		array("var"	=>	null, "qry"	=>	""),
+			"ALL"			=>		array("var"	=>	null, "qry"	=>	"ALL"),
 			"ANSWERED"		=>		array("var"	=>	null, "qry"	=>	"ANSWERED"),
 			"BCC"			=>		array("var"	=>	"email", "qry"	=>	"BCC \"{email}\""),
 			"BEFORE"		=>		array("var"	=>	"date", "qry"	=>	"BEFORE \"{date}\""),
@@ -130,7 +130,7 @@ class eSwipeImapSearchBuilder {
 	 * @return void
 	 * @throws Exception
 	 **********************************/
-	public function setCriteria(array $criteria array()) {
+	public function setCriteria(array $criteria = array()) {
 
 		if(is_array($criteria) && count($criteria) > 0) {
 
@@ -152,7 +152,7 @@ class eSwipeImapSearchBuilder {
 	 * @return void
 	 **********************************/
 	private function setCriteriaString($str) {
-		$this->_criteriaString = $str;
+		$this->_criteriaString = trim($str);
 	}
 
 
@@ -170,43 +170,66 @@ class eSwipeImapSearchBuilder {
 	 * @throws Exception
 	 ******************************************/
 	public function BuildCriteriaString() {
-
+		// if its already built do nothing
 		if(!$this->IsBuilt()) {
 
+			// check for criteria ... if not exist throw exception
 			if(isset($this->_criteria) && count($this->_criteria) > 0) {
 
-				$str = "ALL";
+				// start building string
+				$str = "";
+				// iterate through the criteria and build string
 				foreach($this->_criteria as $field => $value) {
 
 					$field = strtoupper($field);
 
+					// if field not found in map, its invalid
 					if(!isset($this->_criteriaMap[$field])) {
 						$this->_invalidations[] = "Field [{$field}] skipping invalid field";
 						continue;
 					}
 
+
+					// if field var is empty, then just add the query string
 					if(is_null($this->_criteriaMap[$field]["var"])) {
 
-						$str .= " {$this->_criteriaMap[$field]["query"]}";
+						$str .= " {$this->_criteriaMap[$field]["qry"]}";
 
+					// otherwise, we must parse the query string and
+					// replace the var with the value
 					} else {
 
+						// make sure there is a value
 						if(!isset($value) || empty($value) || is_null($value)) {
 							$this->_invalidations[] = "Field [{$field}] error parsing value";
 							continue;
 						}
 
+						// replace the query string template with the value
+						// from the criteria
+						$parsed = str_replace("{{$this->_criteriaMap[$field]["var"]}}", $value, $this->_criteriaMap[$field]["qry"]);
+						// append parsed string
+						$str .= " {$parsed}";
+
+					}
 
 
-				}
+				} // END FOREACH
 
+				// set value
+				$this->setCriteriaString($str);
+				$this->_isBuilt = true;
+
+
+			// if no criterial throw excep
 			} else {
 
 				throw new Exception("Criteria not provided eSwipeImapSearchBuilder::BuildCriteriaString");
 
-			}
+			} // END ELSE
 
-		}
+
+		} // END IsBuilt IF
 
 
 	}
