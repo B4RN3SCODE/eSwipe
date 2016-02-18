@@ -8,10 +8,10 @@ ini_set("track_errors", 1);
 ini_set("html_errors", 1);
 
 
-include_once("include/swap/core/eSwapImap.php");
+include_once("include/swipe/core/eSwipeImap.php");
 echo "<html><body><pre>";
 
-$o = new eSwapImap();
+$o = new eSwipeImap();
 if($o->Open()) {
 
 	$output = '';

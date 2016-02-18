@@ -1,14 +1,14 @@
 <?php
 #region dependencies
-include_once("include/swap/config/config.php");
-include_once("eSwapImapSearchBuilder.php");
+include_once("include/swipe/config/config.php");
+include_once("eSwipeImapSearchBuilder.php");
 #endreadion
 
 #region intro
 /***********************************************************
- * eSwapImap
+ * eSwipeImap
  * IMAP object wrapper for phps normal imap functions for
- * an eSwap OOP system
+ * an eSwipe OOP system
  *
  * @author			Tyler J Barnes
  * @contact			tylerb@conversionvoodoo.com
@@ -26,8 +26,8 @@ include_once("eSwapImapSearchBuilder.php");
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #endregion
 
-#region eSwapImap
-class eSwapImap {
+#region eSwipeImap
+class eSwipeImap {
 
 	#region props
 
@@ -61,7 +61,7 @@ class eSwapImap {
 	 * @param retries (int) number of auth/conn retries
 	 * @return void
 	 ****************************************************/
-	public function eSwapImap($mailboxstr = "", $retries = 0) {
+	public function eSwipeImap($mailboxstr = "", $retries = 0) {
 
 		// set mailbox string based on param
 		// set defaults based on config values

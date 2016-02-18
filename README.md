@@ -1,3 +1,3 @@
-#eSwap
+#eSwipe
 
-**DB of swap file contents from forwarded emails**
+**DB of swipe file contents from forwarded emails**

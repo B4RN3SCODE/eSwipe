@@ -1,5 +1,5 @@
 *.log
 *.tmp.php
 *.txt
-/include/swap/config/config.php
+/include/swipe/config/config.php
 /include/data/config/config.php

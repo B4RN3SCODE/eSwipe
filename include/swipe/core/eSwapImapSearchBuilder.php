@@ -1,7 +1,7 @@
 <?php
 #region intro
 /***********************************************************
- * eSwapImapSearchBuilder
+ * eSwipeImapSearchBuilder
  * Builds search criteria string to make email searching
  * easier
  *
@@ -21,8 +21,8 @@
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #endregion
 
-#region eSwapImap
-class eSwapImapSearchBuilder {
+#region eSwipeImapSearchBuilder
+class eSwipeImapSearchBuilder {
 
 	#region props
 
@@ -52,7 +52,7 @@ class eSwapImapSearchBuilder {
 	 * @param criteria (array) crieteria ['CRITERIA'=>'VAL']
 	 * @return void
 	 *******************************************************/
-	public function eSwapImapSearchBuilder(array $criteria = array()) {
+	public function eSwipeImapSearchBuilder(array $criteria = array()) {
 
 		$this->_criteria = $criteria;
 		$this->_invalidations = array();
@@ -139,7 +139,7 @@ class eSwapImapSearchBuilder {
 
 		} else {
 
-			throw new Exception("Invalid criteria passed eSwapImapSeachBuilder::setCriteria");
+			throw new Exception("Invalid criteria passed eSwipeImapSearchBuilder::setCriteria");
 
 		}
 	}
@@ -202,7 +202,7 @@ class eSwapImapSearchBuilder {
 
 			} else {
 
-				throw new Exception("Criteria not provided eSwapImapSearchBuilder::BuildCriteriaString");
+				throw new Exception("Criteria not provided eSwipeImapSearchBuilder::BuildCriteriaString");
 
 			}
 
