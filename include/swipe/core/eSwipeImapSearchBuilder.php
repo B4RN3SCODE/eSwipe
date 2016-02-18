@@ -236,6 +236,30 @@ class eSwipeImapSearchBuilder {
 
 
 
+
+	/**********************************************
+	 * GetBuild
+	 * Builds the criteria string and returns value
+	 *
+	 * @return string
+	 * @throws Exception
+	 **********************************************/
+	public function GetBuild() {
+
+		try {
+
+			// build
+			$this->BuildCriteriaString();
+			return $this->getCriteriaString();
+
+		} catch(Exception $e) {
+			throw $e;
+		}
+
+	}
+
+
+
 	#endregion
 
 

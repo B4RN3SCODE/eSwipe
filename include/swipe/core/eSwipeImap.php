@@ -2,6 +2,7 @@
 #region dependencies
 include_once("include/swipe/config/config.php");
 include_once("eSwipeImapSearchBuilder.php");
+include_once("eSwipeImapEmailHandler.php");
 #endreadion
 
 #region intro
@@ -49,6 +50,24 @@ class eSwipeImap {
 	// tracks if connection is open
 	private $_opened;
 
+	// search builder object to use
+	private $_searcher;
+
+	// email handler
+	private $_emailHandler;
+
+	// email list
+	public $_emailList;
+
+	// imap_errors
+	private $_imapErrors;
+
+	// exceptions stack
+	private $_exceptions;
+
+	// STATIC property default search criteria for email query
+	protected static $DEFAULT_SEARCH_CRITERIA = array("ALL"=>null,"UNSEEN"=>null);
+
 	#endregion
 
 
@@ -71,6 +90,9 @@ class eSwipeImap {
 		$this->_numRetries = $retries;
 		$this->_mailBox = null;
 		$this->_opened = false;
+		$this->_searcher = null;
+		$this->_emailHandler = null;
+		$this->_emailList = array();
 
 	}
 	#endregion
@@ -98,6 +120,23 @@ class eSwipeImap {
 	 * @return (bool) true if connected
 	 ******************************************************/
 	public function IsConnected() { return $this->_opened; }
+
+
+
+	/*******************************************************
+	 * getImapErrors
+	 * @return errors
+	 ******************************************************/
+	public function getImapErrors() { $this->_imapErrors = imap_errors(); return $this->_imapErrors; }
+
+
+
+	/*****************************************************
+	 * getEmailList
+	 * @return array of emails
+	 *****************************************************/
+	public function getEmailList() { return $this->_emailList; }
+
 
 
 
@@ -164,6 +203,89 @@ class eSwipeImap {
 
 		return $this->IsConnected();
 	}
+
+
+
+
+	/***************************************************
+	 * Search
+	 * Search for emails based on criteria passed - or
+	 * using default search criteria
+	 *
+	 * @param criteria (array) search options
+	 * @return array of email results
+	 * @throws Exception
+	 ***************************************************/
+	public function Search(array $criteria = array(), $return_search = true) {
+
+		if(!isset($criteria) || empty($criteria)) {
+			$criteria = self::$DEFAULT_SEARCH_CRITERIA;
+		}
+		// make sure we are connected
+		if(!$this->IsConnected()) {
+			// report connect failure
+			if(!$this->Open()) {
+				throw new Exception("Cannot establish IMAP connection eSwipeImap::Search");
+			}
+		}
+
+		$result = array();
+
+		try {
+
+			$this->PrepareSearch($criteria);
+			// imap_search
+			$email_result = imap_search($this->_mailBox, $this->_searcher->getCriteriaString());
+
+			if($email_result !== false) {
+				$result = $email_result;
+			}
+
+		} catch(Exception $e) {
+			throw $e;
+		}
+
+		$this->_emailList = $result;
+
+		if($return_search === true) {
+			return $this->_emailList;
+		}
+
+	}
+
+
+
+	/**************************************
+	 * PrepareSearch
+	 * Prepares search criteria string by
+	 * utilizing the searcher object and
+	 * building the string
+	 *
+	 * @param criteria array of criteria
+	 * @return true if successful build
+	 * @throws Exception
+	 ***************************************/
+	public function PrepareSearch(array $criteria = array()) {
+
+		if(!isset($this->_searcher) || !($this->_searcher instanceof eSwipeImapSearchBuilder)) {
+			$this->_searcher = new eSwipeImapSearchBuilder();
+		}
+
+		try {
+
+			$this->_searcher->setCriteria($criteria);
+			$this->_searcher->BuildCriteriaString();
+
+		} catch(Exception $e) {
+			throw $e;
+		}
+
+		return $this->_searcher->IsBuilt();
+
+	}
+
+
+
 
 	#endregion
 
